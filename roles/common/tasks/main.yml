@@ -1,4 +1,8 @@
 ---
+
+- lineinfile: dest=/etc/apt/sources.list state=absent regexp="^deb cdrom:"
+  sudo: yes
+  
 - name: Common | Updates packages
   sudo: yes
   apt: update_cache=yes upgrade=dist
