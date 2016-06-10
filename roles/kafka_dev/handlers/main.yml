@@ -1,0 +1,3 @@
+- name: restart kafka
+  service: name=kafka-broker state=restarted enabled=yes
+

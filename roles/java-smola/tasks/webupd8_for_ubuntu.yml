@@ -1,0 +1,8 @@
+---
+- name: Install WebUpd8 Team Java PPA (for Oracle Java) NO VALIDATION
+  apt_repository: repo='ppa:webupd8team/java' state=present validate_certs=no
+  when: java_needs_oracle
+
+- name: Remove WebUpd8 Team Java PPA (for Oracle Java) NO VALIDATION
+  apt_repository: repo='ppa:webupd8team/java' state=present validate_certs=no
+  when: java_cleanup and not java_needs_oracle

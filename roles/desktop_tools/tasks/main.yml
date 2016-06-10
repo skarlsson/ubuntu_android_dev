@@ -1,0 +1,7 @@
+- name: make sure nice-to-have stuff are installed/up-to-date
+  sudo: yes
+  apt: pkg={{ item }}
+  
+  with_items:
+    - vlc 
+    - browser-plugin-vlc

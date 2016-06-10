@@ -1,0 +1,33 @@
+# file: roles/build/tasks/main.yml
+
+- name: Build | Make sure essential build/dev tools and compilers are installed/up-to-date
+  sudo: yes
+  apt: pkg={{ item }}
+  
+  with_items:
+    - subversion
+    - git
+    - htop
+    - ack-grep
+    - acl
+    - apticron
+    - automake
+    - autoconf
+    - binutils-doc
+    - build-essential
+    - g++
+    - libtool
+    - libssl-dev
+    - libwww-perl
+    - update-notifier-common
+    - uuid-dev
+    - cmake 
+    - autotools-dev
+    - libicu-dev 
+    - zlib1g-dev 
+    - libcurl4-openssl-dev
+    - libbz2-dev 
+    - libcurl3
+    - libboost-dev 
+    - libboost-all-dev
+    - libpq-dev

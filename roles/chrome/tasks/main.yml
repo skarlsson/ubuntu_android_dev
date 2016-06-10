@@ -1,0 +1,8 @@
+- apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
+  sudo: yes
+  
+- apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' state=present
+  sudo: yes
+
+- apt: pkg=google-chrome-stable update_cache=yes
+  sudo: yes 

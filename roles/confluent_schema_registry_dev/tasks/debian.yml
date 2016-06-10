@@ -1,0 +1,56 @@
+- name: add confluent signing key
+  apt_key: url=http://packages.confluent.io/deb/1.0/archive.key state=present  
+  sudo: yes 
+  
+- name: add confluent repo
+  apt_repository: repo='deb [arch=all] http://packages.confluent.io/deb/1.0 stable main' state=present  
+  sudo: yes 
+  
+- name: update apt packages
+  apt: update_cache=yes
+  sudo: yes 
+  
+- name: Make sure the kafka group is present
+  action: group name={{ kafka_group }} state=present
+  sudo: yes 
+  
+- name: Make sure the kafka user directory is present
+  action: file path="/app/home/{{ kafka_user }}" state=directory
+  sudo: yes 
+  
+- name: Make sure the kafka user is present
+  user: name={{ kafka_user }} group={{ kafka_group }} home="/app/home/{{ kafka_user }}" shell=/bin/bash state=present comment="Kafka user"
+  sudo: yes 
+  
+- name: install packages
+  apt: pkg={{ item }}
+  sudo: yes   
+  with_items:
+   - confluent-schema-registry
+
+- file: path=/etc/kafka/schema-registry.properties state=absent
+  sudo: yes 
+  
+- file: path=/etc/confluent-schema-registry state=directory owner={{ kafka_user }} group={{ kafka_group }}
+  sudo: yes 
+
+- name: Update the configuration
+  template: src=schema-registry.properties dest=/etc/confluent-schema-registry/schema-registry.properties owner={{ kafka_user }} group={{ kafka_group }} mode=0644
+  sudo: yes 
+  notify:
+    - restart confluent-schema-registry
+   
+- name: "install upstart conf"
+  template:
+    src: upstart.conf
+    dest: "/etc/init/confluent-schema-registry.conf"
+    owner: root
+    group: root
+    mode: 0644
+  sudo: yes 
+  notify:
+    - restart confluent-schema-registry
+    
+- name: "make sure the confluent-schema-registry is running and enabled"
+  service: "name=confluent-schema-registry state=running enabled=yes"
+  sudo: yes   

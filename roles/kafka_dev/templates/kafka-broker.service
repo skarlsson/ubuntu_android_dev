@@ -1,0 +1,14 @@
+[Unit]
+Description=Kafka
+Before=
+After=network.target
+
+[Service]
+User=kafka
+Environment="JAVA_HOME=/usr/local/java8" "JRE_HOME=/usr/local/java8/jre" "JMX_PORT={{kafka_server_JMX_PORT}}"
+CHDIR= {{ kafka_root_dir }}
+ExecStart={{ kafka_root_dir }}/kafka/bin/kafka-server-start.sh {{ kafka_root_dir }}/config/server.properties
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

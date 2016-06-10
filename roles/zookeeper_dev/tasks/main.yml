@@ -1,0 +1,22 @@
+- name: Apt install required system packages.
+  apt: pkg={{item}} state=installed
+  sudo: yes
+  with_items:
+    - zookeeper
+    - zookeeperd
+
+- name: Overwrite myid file.
+  template: src=myid dest=/etc/zookeeper/conf/myid
+  sudo: yes  
+  notify:
+    - restart zookeeper
+
+- name: Overwrite default config file
+  template: src=zoo.cfg dest=/etc/zookeeper/conf/zoo.cfg
+  sudo: yes
+  notify:
+    - restart zookeeper
+
+- name: Start zookeeper service
+  service: name=zookeeper state=started enabled=yes
+  sudo: yes
